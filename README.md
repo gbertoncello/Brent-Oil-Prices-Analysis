@@ -1,7 +1,6 @@
 # Brent-Oil-Prices-Analysis
 Brent Oil Prices Analysis
 
-SMPE-UFRGS
 This is my final work for UFRGS SMPE Lecture
 
 Proposed Topic CMP606
