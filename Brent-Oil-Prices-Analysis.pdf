@@ -9,6 +9,12 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r}
+install.packages("tidyr")
+install.packages("ggplot2")
+install.packages("dplyr")
+```
+
 ## R Markdown
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
@@ -16,13 +22,141 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
 
-```{r}
-dtset_path ="https://github.com/gbertoncello/Brent-Oil-Prices-Analysis/blob/master/BrentOilPrices.csv"
+```{r Set Europe Brent Annual Dataset}
+dtset_path ="https://raw.githubusercontent.com/gbertoncello/Brent-Oil-Prices-Analysis/master/brent-annual_csv.csv"
 brent_oil_prices <- read.csv(dtset_path,
                     header = TRUE,
                     sep = ",", dec = ".",
-                    stringsAsFactors = FALSE,
-                    quote="", fill=FALSE)
+                    stringsAsFactors = FALSE)
+names(brent_oil_prices) <- c("Date","Price")
 head(brent_oil_prices)
 ```
+```{r Date x Price}
+library(ggplot2)
+library(dplyr)
+ 
+```
 
+
+
+
+```{r Europe Brent Oil Price by Year (2000-2018) }
+ Year_f<-substring(brent_oil_prices$Date,1,4)
+ Year = as.integer(Year_f)
+ price_by_year = cbind(brent_oil_prices,Year)
+ price_by_year %>%
+  group_by(Price) %>% 
+  filter(Year > "1999") %>%
+  ggplot(aes(Year,Price,group = 1)) +
+  geom_line() +
+  geom_point() +
+  geom_smooth(method = "loess", se = FALSE) +
+ geom_text(aes(label = Price), vjust = -0.5, color = "red") +
+    labs(x = "Year",
+       y = "Price Europe Brent (Dollars per Barrel)",
+       title = "Price Europe Brent x Year (2000-2018)",
+       caption = "Author: Germano Bertoncello")
+```
+
+
+```{r Set WTI Annual Dataset}
+dtset_path_wti ="https://raw.githubusercontent.com/gbertoncello/Brent-Oil-Prices-Analysis/master/wti-annual_csv.csv"
+wti_oil_prices <- read.csv(dtset_path_wti,
+                    header = TRUE,
+                    sep = ",", dec = ".",
+                    stringsAsFactors = FALSE)
+names(wti_oil_prices) <- c("WDate","WPrice")
+head(wti_oil_prices)
+```
+
+```{r WTI Oil Price by Year (2000-2018)}
+ WYear_f<-substring(wti_oil_prices$WDate,1,4)
+ WYear = as.integer(WYear_f)
+ Wprice_by_year = cbind(wti_oil_prices,WYear)
+ Wprice_by_year %>%
+  group_by(WPrice) %>% 
+  filter(WYear > "1999") %>%
+  ggplot(aes(WYear,WPrice,group = 1)) +
+  geom_line() +
+  geom_point() +
+  geom_smooth(method = "loess", se = FALSE) +
+  geom_text(aes(label = WPrice), vjust = -0.5, color = "red") +
+  labs(x = "Year",
+       y = "Price WTI (Dollars per Barrel)",
+       title = "Price WTI x Year (2000-2018)",
+       caption = "Author: Germano Bertoncello")
+```
+
+```{r Adjust #rows}
+price_by_year
+Wprice_by_year <- Wprice_by_year[-c(1),]
+Wprice_by_year
+Merged_Oil_Data = cbind(price_by_year,Wprice_by_year)
+Merged_Oil_Data
+```
+
+
+```{r Europe Brent Oil x WTI}
+Merged_Oil_Data %>%
+  group_by(Price) %>% 
+  filter(Year > "1999") %>%
+  ggplot(aes(Year,Price,group = 1)) +
+  geom_line() +
+  geom_point() +
+  geom_line(aes(y = WPrice), color = "red")
+```
+
+
+
+```{r Europe Brent Daily Dataset}
+dtset_path_daily_ ="https://raw.githubusercontent.com/gbertoncello/Brent-Oil-Prices-Analysis/master/brent-daily_csv.csv"
+brent_oil_prices_daily <- read.csv(dtset_path_daily_,
+                    header = TRUE,
+                    sep = ",", dec = ".",
+                    stringsAsFactors = FALSE)
+names(brent_oil_prices_daily) <- c("Date","Price")
+head(brent_oil_prices_daily)
+```
+
+
+```{r Mean prices by Year and by Month}
+library(dplyr)
+library(lubridate)
+
+mean_price_by_year <-brent_oil_prices_daily %>%
+  mutate(date = year(Date)) %>%
+  group_by(date) %>%
+  summarize(mean_prices = mean(Price))
+mean_price_by_year
+
+mean_prices_by_month <-brent_oil_prices_daily %>%
+  mutate(date = month(Date)) %>%
+  group_by(date) %>%
+  summarize(mean_prices = mean(Price))
+mean_prices_by_month
+```
+
+```{r WTI Daily Dataset}
+dtset_path_daily_wti ="https://raw.githubusercontent.com/gbertoncello/Brent-Oil-Prices-Analysis/master/wti-daily_csv.csv"
+wti_oil_prices_daily <- read.csv(dtset_path_daily_wti,
+                    header = TRUE,
+                    sep = ",", dec = ".",
+                    stringsAsFactors = FALSE)
+names(wti_oil_prices_daily) <- c("Date","Price")
+head(wti_oil_prices_daily)
+```
+
+```{r Mean prices by Year and by Month}
+
+Wmean_price_by_year <-wti_oil_prices_daily %>%
+  mutate(date = year(Date)) %>%
+  group_by(date) %>%
+  summarize(mean_prices = mean(Price))
+Wmean_price_by_year
+
+Wmean_prices_by_month <-wti_oil_prices_daily %>%
+  mutate(date = month(Date)) %>%
+  group_by(date) %>%
+  summarize(mean_prices = mean(Price))
+Wmean_prices_by_month
+```
