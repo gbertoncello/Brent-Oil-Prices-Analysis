@@ -13,6 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 install.packages("tidyr")
 install.packages("ggplot2")
 install.packages("dplyr")
+install.packages("lubridate")
 ```
 
 ## R Markdown
@@ -41,6 +42,7 @@ library(dplyr)
 
 
 ```{r Europe Brent Oil Price by Year (2000-2018) }
+#Price available on June 30th of each year (1987-06-30,1988-06-30,...)
  Year_f<-substring(brent_oil_prices$Date,1,4)
  Year = as.integer(Year_f)
  price_by_year = cbind(brent_oil_prices,Year)
@@ -70,6 +72,7 @@ head(wti_oil_prices)
 ```
 
 ```{r WTI Oil Price by Year (2000-2018)}
+#Price available on June 30th of each year (1987-06-30,1988-06-30,...)
  WYear_f<-substring(wti_oil_prices$WDate,1,4)
  WYear = as.integer(WYear_f)
  Wprice_by_year = cbind(wti_oil_prices,WYear)
@@ -103,7 +106,11 @@ Merged_Oil_Data %>%
   ggplot(aes(Year,Price,group = 1)) +
   geom_line() +
   geom_point() +
-  geom_line(aes(y = WPrice), color = "red")
+  geom_line(aes(y = WPrice), color = "red") +
+  labs(x = "Year",
+       y = "Price WTI (RED) and Price Brent(BLACK) (Dollars per Barrel)",
+       title = "Price WTI x Price Brent (2000-2018)",
+       caption = "Author: Germano Bertoncello")
 ```
 
 
