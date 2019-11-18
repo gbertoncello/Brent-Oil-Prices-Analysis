@@ -2,7 +2,9 @@
 title: "Brent Oil Prices"
 author: "Germano Bertoncello"
 date: "17/11/2019"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -153,7 +155,7 @@ names(wti_oil_prices_daily) <- c("Date","Price")
 head(wti_oil_prices_daily)
 ```
 
-```{r Mean prices by Year and by Month}
+```{r WIT Mean prices by Year and by Month}
 
 Wmean_price_by_year <-wti_oil_prices_daily %>%
   mutate(date = year(Date)) %>%
