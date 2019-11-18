@@ -13,6 +13,7 @@ About the data
 The data contains daily Brent oil prices from 17th of May 1987 until the 30th of September 2019 and it was retrieved from the U.S. Energy Information Administration(EIA): Europe Brent Spot Price FOB (Dollars per Barrel) and Cushing, OK WTI Spot Price FOB (Dollars per Barrel).
 
 Definitions (https://www.eia.gov/dnav/pet/TblDefs/pet_pri_spt_tbldef2.asp)
+
 Brent 
 A blended crude stream produced in the North Sea region which serves as a reference or “marker” for pricing a number of other crude streams. 
 
