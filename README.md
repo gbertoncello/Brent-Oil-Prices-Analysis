@@ -15,9 +15,11 @@ The data contains daily Brent oil prices from 17th of May 1987 until the 30th of
 Definitions (https://www.eia.gov/dnav/pet/TblDefs/pet_pri_spt_tbldef2.asp)
 
 Brent 
+
 A blended crude stream produced in the North Sea region which serves as a reference or “marker” for pricing a number of other crude streams. 
 
 West Texas Intermediate (WTI - Cushing) 
+
 A crude stream produced in Texas and southern Oklahoma which serves as a reference or “marker” for pricing a number of other crude streams and which is traded in the domestic spot market at Cushing, Oklahoma. 
 
 
